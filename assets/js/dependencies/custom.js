@@ -1,12 +1,12 @@
+angular.module('MyApp', []);
 angular.module('MyApp').controller('userCtrl', [
   '$scope', '$http',
   function($scope, $http) {
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Empezar sirviendo la lista de recetas
-    /////////////////////////////////////////////////////////////////////////////
-
+ /////////////////////////////////////////////////////////////////////////////
+    // Immediately start fetching list of videos from the server.
+    ///////////////////////////////////////////////////////////////////////////// 
     // First, show a loading spinner
     $scope.recetasLoading = true;
 
@@ -14,7 +14,7 @@ angular.module('MyApp').controller('userCtrl', [
 
 
     // Get the existing videos.
-    io.socket.get('/video', function whenServerResponds(data, JWR) {
+    io.socket.get('/receta', function whenServerResponds(data, JWR) {
       $scope.recetasLoading = false;
 
       if (JWR.statusCode >= 400) {
@@ -54,17 +54,11 @@ angular.module('MyApp').controller('userCtrl', [
       // Harvest the data out of the form
       // (thanks to ng-model, it's already in the $scope object)
       var _newReceta = {
-        nombre: $scope.newNombreReceta,
+        nombre: $scope.newRecetaNombre,
         preparacion: $scope.newRecetaPreparacion,
       };
 
-      // create placeholder anchor element
-      var parser = document.createElement('a');
-
-      // assign url to parser.href
-      parser.href = _newReceta.src
-
-
+    
       // Side note:
       // Why not use something like `$scope.videoForm.title` or `$scope.newVideo.title`?
       // While this certainly keeps things more organized, it is a bit risky in the Angular
@@ -95,11 +89,11 @@ angular.module('MyApp').controller('userCtrl', [
           return;
         }
 
-        $scope.recetas.unshift(_newVideo);
+        $scope.recetas.unshift(_newReceta);
 
         // Hide the loading state
         // (also re-enables form submission)
-        $scope.busySubmittingRecetas = false;
+        $scope.busySubmittingReceta = false;
 
         //Clear out form inputs
         $scope.newRecetasNombre = '';
@@ -111,10 +105,10 @@ angular.module('MyApp').controller('userCtrl', [
 
       io.socket.on('receta', function whenARecetaIsCreatedUpdatedOrDestroyed(event) {
 
-        // Add the new video to the DOM
+        // Add the new recipe to the DOM
         $scope.recetas.unshift({
-          nombre: event.data.title,
-          preparacion: event.data.src,
+          nombre: event.data.nombre,
+          preparacion: event.data.preparacion,
 
         });
 

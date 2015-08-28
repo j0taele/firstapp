@@ -1,6 +1,6 @@
 <h1>Recetas</h1>
 <hr>
-<div ng-app="MyApp" ng-controller="userCtrl">
+<div ng-app="MyApp" ng-controller="userCtrl" ng-cloak>
  <form class="form-horizontal" ng-submit="submitNewReceta()">
   <div class="form-group">
     <label class="col-sm-2 control-label">Nombre Receta:</label>
@@ -19,7 +19,7 @@
     </div>
    </div>
     <button class="btn btn-success" type="submit"
-          ng-disabled="busySubmittingReceta">{{busySubmittingReceta?'Submitting...':'Submit Receta'}}
+          ng-disabled="busySubmittingReceta">{{busySubmittingReceta?'Submitting...':'Guardar Receta'}}
     </button>
  
  </form>
@@ -29,5 +29,16 @@
 
 <h2>Listado de recetas</h2>
 
-
+ <!-- LIST OF recetas -->
+  <section class="the-list-of-recetas col-md-12">
+    <div class="loading" ng-if="recetasLoading">Loading recetas...</div>
+    <div ng-if="!recetasLoading && recetas.length===0 && !submitrecetasError">There are no recetas, please add one!</div>
+    <ul>
+      <li class="receta" ng-repeat="receta in recetas" ng-if="!recetasLoading">
+        <h2>{{receta.nombre}}</h2>
+        <p>{{receta.preparacion}}</p>
+        </iframe>
+      </li>
+    </ul>
+  </section>
 </div>
